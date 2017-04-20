@@ -1,0 +1,9 @@
+test/*
+static/*
+
+*.o
+./*
+!./*.cpp
+!./*.h
+!.gitignore
+
