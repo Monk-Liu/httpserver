@@ -1,31 +1,22 @@
+#ifndef HTTPHANDLER_H 
+#define HTTPHANDLER_H 1
 #include <string>
 #include <vector>
 #include <map>
+#include <iostream>
+#include "mysocket.h"
+#include "httpresponse.h"
+#include "httprequest.h"
+#include "app.h"
+
+using namespace std;
 
 class HttpHandler{
 
 public:
-    handler(string & str);
+    string handler(MySocket * skfd,string  str);
 
     HttpHandler();
     ~HttpHandler();
 };
-
-
-classs HttpRequest{
-    enum _method{
-        GET,HEAD, POST,//in HTTP 1.0
-        PUT, DELETE, CONNECT, OPTIONS, TRACE//HTTP 1.1
-    }
-
-    const string body;
-    string url;
-    _method method;
-    string version;
-    map<string, string> header;
-    
-
-public:
-    HttpRequest();
-    ~HttpRequest();
-}
+#endif

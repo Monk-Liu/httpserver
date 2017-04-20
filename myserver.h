@@ -1,3 +1,5 @@
+#ifndef MYSERVER_H
+#define MYSERVER_H 1
 #include <iostream>
 #include <stdio.h>
 #include <sys/socket.h>
@@ -10,20 +12,12 @@
 #include <iostream>
 #include <stdlib.h>
 #include "perror.h"
+#include "mysocket.h"
+#include "httphandler.h"
 
 using namespace std;
 
 
-class MySocket{
-    struct sockaddr sa;
-    const int skfd;
-
-public:
-    MySocket(int arg_skfd, struct sockaddr * arg_sa);
-    int myread(string& rbuff);
-    int mywrite(string& wbuff);
-    ~MySocket();
-};
 
 class MyServer{
     int skfd;
@@ -36,3 +30,4 @@ public:
     MySocket * myaccept();
     ~MyServer();
 };
+#endif
