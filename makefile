@@ -19,7 +19,7 @@ httphandler.o: httphandler.cpp httpresponse.h httprequest.h app.h
 	g++ -c httphandler.cpp
 
 httpresponse.o: httpresponse.cpp mysocket.h
-	g++ -c httpresponse.cpp
+	g++ -c httpresponse.cpp -g
 
 httprequest.o: httprequest.cpp
 	g++ -c httprequest.cpp

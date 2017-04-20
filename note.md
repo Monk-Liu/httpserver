@@ -35,3 +35,13 @@ s 跳入函数, finish跳出, print显示
 继续追查发现是MySocket::mywrite函数里面,用了memcpy cpoy一个string的引用的时候,吧 writeHeader栈内变量内容覆写了
 这个问题有由于 writesize, 这个临时变量没有处理好
 由此: 以后出现这种问题, 主要查看 有memcpy, alloc relloc这这种内存操作的地方!!!
+
++ core dump munmap_chunk(): Invaild pointer;
+这个内存泄露是 free一个无效指针,在MySocket::myread中, 用了string::append导致了这个错误
+联想到是不是,在append的过程中, 会检测参数是否在堆中, append的参数在堆中会释放那块内存, 导致while循环第二次append的时候出错?
+然后吧buffer定义在栈中, 没有这个问题了???
+很迷  //TODO
+
++ 检查了一个晚上的 内存冲突问题, 居然是
+ new char(BUFFSIZE)导致的
+ ---> new char[BUFFSIZE]

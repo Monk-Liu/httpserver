@@ -9,17 +9,17 @@
     const MySocket* skfd
 */
     
-int HttpResponse::addHeader(string & key, string &val){
+int HttpResponse::addHeader(string  key, string val){
     if(headers.find(key) == headers.end()){
         return -1;
     }
-    headers[key] = val;
+    headers.insert(pair<string, string>(key,val));
     return 0;
 };
 
-int HttpResponse::setHeader(string & key, string &val){
+int HttpResponse::setHeader(string  key, string val){
     cout<<"setHeader:"<<key<<val<<endl;
-    headers[key] = val;
+    headers.insert(pair<string, string>(key,val));
     return 0;
 };
 
@@ -48,16 +48,15 @@ int HttpResponse::setVersion(string arg_version="HTTP/0.9"){
 
 int HttpResponse::setDataLen(long arg_dlen){
     datalen = arg_dlen;
-    cout<<"setDataLen:"<<arg_dlen<<endl;
+    cout<<"datalen is"<<datalen<<endl;
     char str_len[15];
     sprintf(str_len,"%ld",datalen);
-    cout<<"datalen is"<<string(str_len)<<endl;
-    headers["Content-Length"] = string(str_len);
+    cout<<"datalen is"<<str_len<<endl;
+    headers.insert(pair<string, string>("Content-Length",string(str_len)));
     return 0;
 };
 
 int HttpResponse::writeData(string & buffer){
-    cout<<"writeData:"<<buffer<<endl;
     if(headflag){
         skfd->mywrite(buffer);
     }else{
@@ -108,7 +107,10 @@ HttpResponse::HttpResponse(MySocket * arg_skfd):skfd(arg_skfd){
     reason = "OK";
     version = "HTTP/1.0";
 }
-HttpResponse::~HttpResponse(){};
+HttpResponse::~HttpResponse(){
+    headers.clear();
+    cout<<"clear"<<endl;
+};
 
 
 /*
@@ -121,8 +123,11 @@ int main(){
     int fd = open("./fileout",O_RDWR|O_TRUNC);
     MySocket msk(fd);
     HttpResponse res(&msk);
+    res.setHeader("a","b");
+    res.setDataLen(29);
     res.writeHeader();
     res.writeData(data);
+
     return 0;
 
 }*/

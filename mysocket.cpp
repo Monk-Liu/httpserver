@@ -2,20 +2,21 @@
 
 MySocket::MySocket(int arg_skfd, struct sockaddr * arg_sa):skfd(arg_skfd),BUFFSIZE(100){
     bcopy((char *)arg_sa, (char *)&sa, sizeof(struct sockaddr));
-    buffer = new char(BUFFSIZE);
+    buffer = new char[BUFFSIZE];
 }
 
 MySocket::MySocket(int arg_skfd):skfd(arg_skfd),BUFFSIZE(100){
-    buffer = new char(BUFFSIZE);
+    buffer = new char[BUFFSIZE];
 }
 
 int MySocket::myread(string& rbuff){
     int res=0;
     int n=0;
+    char buffer[BUFFSIZE];
     do{
         n = read(skfd, buffer, BUFFSIZE);
         res+=n;
-        rbuff.append(buffer);
+        rbuff.append(buffer, n);
 
     }while(n==BUFFSIZE);
 
@@ -38,6 +39,7 @@ int MySocket::mywrite(string& wbuff){
         }else{
             writesize = BUFFSIZE;
         } 
+        cout<<writesize<<endl;
         memcpy(buffer,wbuff_char+res,writesize);
         write(skfd, buffer, writesize);
         res+=writesize;

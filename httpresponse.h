@@ -19,8 +19,8 @@ class HttpResponse{
     MySocket* skfd;
     
 public:
-    int addHeader(string &, string &);
-    int setHeader(string &, string &);
+    int addHeader(string , string );
+    int setHeader(string , string );
     int setStatus(int);
     int setVersion(string);
     int setDataLen(long);
