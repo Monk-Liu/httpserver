@@ -45,3 +45,13 @@ s 跳入函数, finish跳出, print显示
 + 检查了一个晚上的 内存冲突问题, 居然是
  new char(BUFFSIZE)导致的
  ---> new char[BUFFSIZE]
+ 
+ + valgrind  内存检查
+ 
+ + vector [详细](http://blog.csdn.net/hancunai0017/article/details/7032383)
+ 
+ + boost库安装的时候出了很多fail(导致后面碰到问题的时候我都以为是编译的时候出错了, 其实并不是)
+ 问题是:
+ 1.官方程序 lambda 编译出错 lambda::detail::operator_return_type..... template 出错argument错误  //TODO
+ 
+ 2.官方filesystem 链接库的时候, 貌似之前已经安装过那个库, 导致一直再用之前的版本1.60.0, 而这个版本和1.48 差别很大, 导致 -lboost_filesystem不对

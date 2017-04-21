@@ -1,5 +1,5 @@
 test: myserver.o perror.o mysocket.o httpresponse.o httprequest.o httphandler.o myutill.o app.o 
-	g++ myserver.o mysocket.o httphandler.o httpresponse.o httprequest.o app.o perror.o myutill.o -o a.o -g
+	g++ myserver.o mysocket.o httphandler.o httpresponse.o httprequest.o app.o perror.o myutill.o -o a.o -g -lboost_system -lboost_filesystem
 
 
 myserver.o: myserver.cpp mysocket.h httphandler.h perror.h
@@ -25,7 +25,7 @@ httprequest.o: httprequest.cpp
 	g++ -c httprequest.cpp
 
 app.o: app.cpp httprequest.h httpresponse.h
-	g++ -c app.cpp
+	g++ -c app.cpp -lboost_system -l boost_filesystem
 
 clean:
 	rm *.o

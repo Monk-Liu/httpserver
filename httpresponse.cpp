@@ -107,6 +107,8 @@ HttpResponse::HttpResponse(MySocket * arg_skfd):skfd(arg_skfd){
     reason = "OK";
     version = "HTTP/1.0";
 }
+
+
 HttpResponse::~HttpResponse(){
     headers.clear();
     cout<<"clear"<<endl;
