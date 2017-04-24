@@ -57,32 +57,3 @@ MyServer::~MyServer(){
     close(skfd);
 }
     
-
-
-
-
-int main(int argc, char **argv){
-
-    if(argc==3){
-        MyServer s(atoi(argv[2]), argv[1]);
-        MySocket* sfd;
-        HttpHandler hh;
-        string rbuff;
-        while(1){
-            sfd = s.myaccept();
-            if(sfd && sfd>=0){
-                int i=0;
-                sfd->myread(rbuff);
-                //cout<<rbuff<<endl;
-                hh.handler(sfd,rbuff);
-                rbuff.clear();
-                delete sfd;
-            }else{
-                printf("---------------------->Error with sfd[%d]\n",sfd);
-            }
-        }
-    }
-
-    return 0;
-
-}

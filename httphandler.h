@@ -8,15 +8,16 @@
 #include "httpresponse.h"
 #include "httprequest.h"
 #include "app.h"
+#include "mythreadpool/mytask.h"
 
 using namespace std;
 
-class HttpHandler{
+class HttpHandler:public mytask{
 
 public:
-    string handler(MySocket * skfd,string  str);
+    HttpHandler(MySocket * skfd,string  str);
 
-    HttpHandler();
+    run();
     ~HttpHandler();
 };
 #endif

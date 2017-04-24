@@ -13,7 +13,6 @@
 #include <stdlib.h>
 #include "perror.h"
 #include "mysocket.h"
-#include "httphandler.h"
 
 using namespace std;
 

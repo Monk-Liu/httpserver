@@ -53,5 +53,57 @@ s 跳入函数, finish跳出, print显示
  + boost库安装的时候出了很多fail(导致后面碰到问题的时候我都以为是编译的时候出错了, 其实并不是)
  问题是:
  1.官方程序 lambda 编译出错 lambda::detail::operator_return_type..... template 出错argument错误  //TODO
+ 2.官方filesystem 链接库的时候, 貌似之前已经安装过那个库, 导致一直再用之前
+的版本1.60.0, 而这个版本和1.48 差别很大, 导致 -lboost_filesystem不对
+ + boost::filesystem::path问题:
  
- 2.官方filesystem 链接库的时候, 貌似之前已经安装过那个库, 导致一直再用之前的版本1.60.0, 而这个版本和1.48 差别很大, 导致 -lboost_filesystem不对
+ 		   const char * path_char = "/statis";
+ 		   const char * p_char = p_str.c_str();
+    		  //cout<<path_str<<endl;
+		    path p(p_str.c_str());
+		    if(exists(p)){
+			if(is_regular_file(p)){
+			    ifstream fd;
+			    //cout<<path_str<<endl;  //the path_str is not the same as line 18;
+			    fd.open(p_char);
+			    cout<<p_char<<endl;
+			    
++ boost::filesystem::copy 怎么实现的? 为什么下面的代码就能实现遍历?
+
+            copy(directory_iterator(p), directory_iterator(), back_inserter(v));
+
++ 感觉boost库用起来没有 标准的那么舒服,  还是自己调系统接口来的直接?
+
++ select pool 用法 三个FD_SET 具体有待研究! //TODO
+
++ threadpool  实现方法; pool对队列管理, 自定义可以assign任务的mythread, 继承task类; virtual的动态绑定!!!
+
++ namespace 是标识符可见范围;
+c++标准库都定义在std中;
+namespace提出, 主要是为了解决命名冲突的问题!
+
++ C++ 解决两个类[互相引用](http://www.cnblogs.com/zendu/p/4987971.html)的方法: A.h里面引用B.h, B.h 定义 class A; , B.cpp里引用A.h
+但是, 为什么这样不会出现类的多次定义?
+
++ C++11 不能定义 void的成员函数?
+实际上是, 返回为void的函数, void要显示定义
+
++ 对, thread(threadfunc, this)的时候, 报错
+
+		  invalid use of non-static member function
+		  
+当时用吧方法改成static解决这个问题, 但是? stackoverflow上有对这个问题深一点的[讨论](http://stackoverflow.com/questions/29286863/invalid-use-of-non-static-member-function
+
++ cpp 居然不能在全局里面定义执行语句?)
+
++ 在 join之前调用～Thread() 导致
+
+		　　terminate called without an active exception
+
+设置为　detach模式可以解决这个问题． why?
+
+		 id get_id() const noexcept;
+		 Get thread id
+		 Returns the thread id.
+		 If the thread object is joinable, the function returns a value that uniquely identifies the thread.
+		 If the thread object is not joinable, the function returns a default-constructed object of member type thread::id.

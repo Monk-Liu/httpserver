@@ -1,6 +1,12 @@
-test: myserver.o perror.o mysocket.o httpresponse.o httprequest.o httphandler.o myutill.o app.o 
-	g++ myserver.o mysocket.o httphandler.o httpresponse.o httprequest.o app.o perror.o myutill.o -o a.o -g -lboost_system -lboost_filesystem
+CPPFLAGS=-Wall -std=c++11 -g
+LDFLAGS=-pthread
 
+test: myserver.o perror.o mysocket.o httpresponse.o httprequest.o httphandler.o myutill.o app.o main.o
+	g++ main.o myserver.o mysocket.o httphandler.o httpresponse.o httprequest.o app.o perror.o myutill.o -o a.o -lboost_system -lboost_filesystem  $(CPPFLAGS) $(LDFLAGS)
+
+
+main.o: main.cpp mysocket.h httphandler.h myserver.h
+	g++ -c main.cpp
 
 myserver.o: myserver.cpp mysocket.h httphandler.h perror.h
 	g++ -c myserver.cpp 
