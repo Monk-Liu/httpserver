@@ -7,7 +7,9 @@
 #include "mysocket.h"
 #include "myserver.h"
 #include "httphandler.h"
+#include "mythreadpool/mythreadpool.h"
 
+using namespace std;
 int main(int, char**);
 
 #endif

@@ -29,7 +29,11 @@ int main(int argc, char ** argv){
         wl[i] = new workthd(i);
         mtp.addtask(wl[i]);
     }
-
     mtp.wait();
+
+    for(int i=0; i<size; i++){
+        //delete wl[i]; delete at MyThread
+    }
+
     return 0;
 }

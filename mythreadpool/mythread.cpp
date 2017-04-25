@@ -14,7 +14,7 @@ int MyThread::backtoidle(){
 int MyThread::threadfunc(MyThread * mt){
     struct timespec ts;
     ts.tv_sec = 0;
-    ts.tv_nsec = 250000000;
+    ts.tv_nsec = 100000;
     while(1){
         if(mt->iskill()){
             break;
@@ -22,11 +22,12 @@ int MyThread::threadfunc(MyThread * mt){
         if(mt->task){
             mt->task->run();
             //cout<<"in thread "<<mt->thread_id<<" run the task "<<mt->task->num<<endl;
+            delete mt->task;
             mt->task = NULL;
             mt->backtoidle();//这个地方,放回去之后, 马上拿出来用, 导致新的任务赋值之后, 又成了NULL; F***;
             //mt->task = NULL;
         }else{
-            nanosleep(&ts, NULL);
+            //nanosleep(&ts, NULL);
         }
     }
 
@@ -37,7 +38,7 @@ MyThread::MyThread(MyThreadPool *arg_threadpool){
     task = NULL;
     kill = false;
     threadp = new thread(threadfunc, this);
-    threadp->detach();
+    threadp->detach(); //对于detch 的线程 valgrind　leak-check　的时候会有些问题
     thread_id = threadp->get_id();//对于不是joinable 的线程, get_id返回一个默认的构造函数的结果
     threadpool = arg_threadpool;
 }
@@ -66,8 +67,9 @@ void MyThread::finishtask(){
 MyThread::~MyThread(){
     kill = true;
     //cout<<thread_id<<" is deleted"<<endl;
-    //struct timespec ts;
-    //ts.tv_sec = 5;
-    //nanosleep(&ts,NULL);
-    delete threadp;
+    struct timespec ts;
+    ts.tv_sec = 0;
+    ts.tv_nsec = 250000000;
+    nanosleep(&ts,NULL);
+    //delete threadp;
 }

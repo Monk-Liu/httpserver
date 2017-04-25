@@ -5,15 +5,18 @@ int main(int argc, char **argv){
         MyServer s(atoi(argv[2]), argv[1]);
         MySocket* sfd;
         string rbuff;
+        MyThreadPool mtp(10);
+        HttpHandler * hd;
         while(1){
             sfd = s.myaccept();
             if(sfd && sfd>=0){
                 int i=0;
                 sfd->myread(rbuff);
                 //cout<<rbuff<<endl;
-                HttpHandler(sfd, rbuff);
+                hd = new HttpHandler(sfd, rbuff);
+                mtp.addtask(hd);
+                //hd->run();
                 rbuff.clear();
-                delete sfd;
             }else{
                 printf("---------------------->Error with sfd[%d]\n",sfd);
             }

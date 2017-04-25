@@ -20,6 +20,7 @@ char * ->string
 	accept: Invalid argument;
 
 + SO_REUSEPORT / SO_REUSEADDR [reference](http://stackoverflow.com/questions/14388706/socket-options-so-reuseaddr-and-so-reuseport-how-do-they-differ-do-they-mean-t)
+also [another sorequest](https://lwn.net/Articles/542629/)
 
 
 + [guide](https://www.scribd.com/document/120274805/QGNPs)
@@ -107,3 +108,16 @@ namespace提出, 主要是为了解决命名冲突的问题!
 		 Returns the thread id.
 		 If the thread object is joinable, the function returns a value that uniquely identifies the thread.
 		 If the thread object is not joinable, the function returns a default-constructed object of member type thread::id.
+		 
++ valgrind leak-check 和　thread detach　之间的[问题](http://stackoverflow.com/questions/20893358/a-detached-pthread-causes-memory-leaks)．
+
++ 加入了threadpool, 然而发现用本机测试
+	
+		 ab -n 10000 -c 1000 127.0.0.1:8080/a
+		 
+ 没有加入线程池的反而更快! 0.9 : 19s
+ 
+ +  而且, 1 构建handler的时候,  string参数没有传入, 导致request构造失败??
+ +  然后, 写mythread的时候,  循环处理的函数threadfunc在处理的时候, 如果没有检测到任务会延迟0.25s再检测, 这个检测在并发的时候很关键! 吧0.25s改为0.1ms, 直接吧 10000个请求 1000并发, 时间从32降到了19;
+ 
+ + 好的, 告一段落, select

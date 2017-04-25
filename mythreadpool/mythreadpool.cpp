@@ -95,13 +95,14 @@ int MyThreadPool::addtask(MyTask * arg_task){
 
 MyThreadPool::~MyThreadPool(){
     //怎么清? 
+    kill = true;
     this->stop();
     //cout<<"another end"<<endl;
     //等所有都运行完 //如果线程卡住了怎么办?
     for(int i=0; i<idlethreadpool.size(); i++){
         delete idlethreadpool[i];
     }
-    delete threadp;
+    //delete threadp; //detach 的线程不用别的释放资源
     //cout<<"finish"<<endl;
 }
 

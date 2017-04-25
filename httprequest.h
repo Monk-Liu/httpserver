@@ -30,6 +30,7 @@ class HttpRequest{
     int parse_path(string &);
 
 public:
+    bool ok;
     HttpRequest(string &);
     ~HttpRequest();
     const string & getmethod();

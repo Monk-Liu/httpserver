@@ -17,13 +17,17 @@ class HttpResponse{
     string reason;
     bool headflag; //写data之前数据有没有写?
     MySocket* skfd;
+    static map<string, string> mime_init();
+
     
 public:
+    static map<string,string> MIME_TYPE;
     int addHeader(string , string );
     int setHeader(string , string );
     int setStatus(int);
     int setVersion(string);
     int setDataLen(long);
+    int writeData(char*,int);
     int writeData(string &);
     int writeHeader();
     int finish();

@@ -12,12 +12,14 @@
 
 using namespace std;
 
-class HttpHandler:public mytask{
+class HttpHandler:public MyTask{
+    MySocket * skfd;
+    string reqstr;
 
 public:
     HttpHandler(MySocket * skfd,string  str);
 
-    run();
+    void run();
     ~HttpHandler();
 };
 #endif

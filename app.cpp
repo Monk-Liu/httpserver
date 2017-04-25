@@ -7,31 +7,32 @@ const static string ROOT = "./static";
 const static char * NOTFOUND = "./static/404.html";
 
 Application::Application(HttpRequest &req, HttpResponse &res){
-    cout<<"start handler"<<endl;
     handler(req,res);
-    cout<<"end handler"<<endl;
 }
 
 int Application::handler(HttpRequest &req, HttpResponse &res){
 
     string p_str = ROOT+req.getpath(); //过滤 ..
     const char * p_char = p_str.c_str();
-    //cout<<path_str<<endl;
     path p(p_str.c_str());
     if(exists(p)){
         if(is_regular_file(p)){
             ifstream fd;
             //cout<<path_str<<endl;  //the path_str is not the same as line 18;
             fd.open(p_char);
-            cout<<p_char<<endl;
-            cout<<"file open"<<fd.is_open()<<endl;
+            //cout<<p_char<<endl;
             if(!(fd.is_open())){
                 return 0;
             }
-            cout<<"file open"<<endl;
+            string ext = extension(p);
+            map<string,string>::iterator it = HttpResponse::MIME_TYPE.find(ext);
             string key, value;
             key = "Content-Type";
-            value = "text/html"; //MIME TYPE
+            if(it != HttpResponse::MIME_TYPE.end()){
+                value = it->second;    
+            }else{
+                value = "text/html"; //MIME TYPE
+            }
             res.setHeader(key,value);
             long len;
             len = file_size(p);
@@ -42,14 +43,21 @@ int Application::handler(HttpRequest &req, HttpResponse &res){
             //redds.setHeader("Content-Length",string(len_cha));
             char buffer[100];
             string wbuf;
+            int i = 0;
+            int writesize = 0;
             while(!(fd.eof())){
                 fd.read(buffer,100);  
-                wbuf = string(buffer);  //mywrite -> string -> char *;
-                res.writeData(wbuf);
-                cout<<"in while loop"<<endl;
-                cout<<fd.eof()<<endl;
+                i += 100;
+                if(i>=len+100){
+                    break;
+                }
+                if(i>len){
+                   writesize = len+100-i; 
+                }else{
+                    writesize = 100;
+                }
+                res.writeData(buffer,writesize);
             }
-            cout<<"file close"<<endl;
             fd.close();
         }else if(is_directory(p)){
             vector<path> v;
@@ -71,10 +79,8 @@ int Application::handler(HttpRequest &req, HttpResponse &res){
             res.writeData(body);
         }
     }else{
-        cout<<"file not found"<<endl;
         ifstream fd;
         fd.open(NOTFOUND);
-        cout<<"file is open:"<<fd.is_open()<<endl;
         if(!fd.is_open()){
             return 0;
         }
@@ -95,12 +101,8 @@ int Application::handler(HttpRequest &req, HttpResponse &res){
             fd.read(buffer,100);  
             wbuf = string(buffer);  //mywrite -> string -> char *;
             res.writeData(wbuf);
-            cout<<"in while loop"<<endl;
         }
-        cout<<"file close"<<endl;
         fd.close();
     }
-
-
 }
 

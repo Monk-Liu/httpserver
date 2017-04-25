@@ -1,20 +1,21 @@
 #include "httphandler.h"
 #include <iomanip>
 
-string HttpHandler::handler(MySocket*skfd,string  str){
-    HttpRequest req(str);
-    HttpResponse res(skfd);
-    cout<<"start process"<<endl;
-    Application app(req, res);
-    
-    cout<<"finish"<<endl;
-
+void HttpHandler::run(){
+    HttpRequest req(reqstr);
+    if(req.ok){
+        HttpResponse res(skfd);
+        Application app(req, res);
+    }else{
+    }
     //return res.getresponse();
-    return "aaa";
+    delete skfd;
+    return ;
 }
 
-HttpHandler::HttpHandler(){
-
+HttpHandler::HttpHandler(MySocket * arg_skfd, string arg_str){
+    skfd = arg_skfd;
+    reqstr = arg_str;
 }
 
 HttpHandler::~HttpHandler(){

@@ -87,25 +87,28 @@ HttpRequest::HttpRequest(string &str){
     int pos = str.find("\r\n");
     int status = -1;
     //Question:parse_basic(str.substr(pos)); return error?
-    if(pos!=string::npos){}else{
+    if(pos!=string::npos){
+        ok = true;
+        string tmp = str.substr(0,pos);
+        /* Question:
+        * string::substr(size_t pos = 0, size_t len = npos);
+        * 定义的时候, 默认参数右边必定是默认参数
+        *
+        * 调用的时候, 默认参数必须按顺序赋值,不能跳过其中一个?????这个设计不好吧?
+        * */
+        status = parse_basic(tmp);
+        if(status<0){
+            //error
+        }
+        tmp = str.substr(pos+2);
+        status = parse_headers(tmp);
+        if(status<0){
+            //error;
+        }
+    }else{
+        ok = false;
         cout<<"get the end"<<endl;
     };
-    string tmp = str.substr(0,pos);
-    /* Question:
-    * string::substr(size_t pos = 0, size_t len = npos);
-    * 定义的时候, 默认参数右边必定是默认参数
-    *
-    * 调用的时候, 默认参数必须按顺序赋值,不能跳过其中一个?????这个设计不好吧?
-    * */
-    status = parse_basic(tmp);
-    if(status<0){
-        //error
-    }
-    tmp = str.substr(pos+2);
-    status = parse_headers(tmp);
-    if(status<0){
-        //error;
-    }
 }
 
 HttpRequest::~HttpRequest(){

@@ -23,6 +23,7 @@ public:
     MySocket(int arg_skfd, struct sockaddr * arg_sa);
     MySocket(int arg_skfd);
     int myread(string& rbuff);
+    int mywrite(char *wbuff, int len);
     int mywrite(string& wbuff);
     ~MySocket();
 };
