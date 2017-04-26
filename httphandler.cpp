@@ -7,6 +7,7 @@ void HttpHandler::run(){
         HttpResponse res(skfd);
         Application app(req, res);
     }else{
+        cout<<"exit"<<endl;//为什么会退出?
     }
     //return res.getresponse();
     delete skfd;

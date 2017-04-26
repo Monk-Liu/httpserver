@@ -121,3 +121,11 @@ namespace提出, 主要是为了解决命名冲突的问题!
  +  然后, 写mythread的时候,  循环处理的函数threadfunc在处理的时候, 如果没有检测到任务会延迟0.25s再检测, 这个检测在并发的时候很关键! 吧0.25s改为0.1ms, 直接吧 10000个请求 1000并发, 时间从32降到了19;
  
  + 好的, 告一段落, select
+ 
+ + [为什么要用select不直接accept](http://www.lowtek.com/sockets/select.html)
+ 
+ + select/ pselect : 1.时间精度 2.select会改变timeout 3, pselect多了一个参数 sigmask
+ 	用select的example实现了简单的select和accept一样, 在本机上看不出来区别
+ 
+ + 然后, ab测试的时候, 10000个连接总有1个2个失败的, 然后服务器就退出了, 
+ --> 错误处理做的不够!!!!

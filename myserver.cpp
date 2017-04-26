@@ -35,22 +35,49 @@ MySocket * MyServer::myaccept(){
     int len=sizeof(struct sockaddr);
     struct sockaddr sa_cli;
     struct sockaddr_in *sai_cli;
-
     sk_cli = accept(skfd, &sa_cli, (socklen_t *)&len);
-
     if(sk_cli==-1){
         cout<<"accept fail"<<endl;
         perr();
         return NULL;
     }
-
     sai_cli = (struct sockaddr_in *)&sa_cli;
-    //printf("%x\n", sai_cli->sin_addr.s_addr);
     printf("Connect from:%s[%d]\n",inet_ntoa(sai_cli->sin_addr),ntohs(sai_cli->sin_port));
-
     MySocket * ms = new MySocket(sk_cli, &sa_cli);
 
     return ms;
+}
+
+vector<MySocket *> MyServer::selectaccept(){
+    int rsize;
+    struct timespec ts{0,250000000};
+    struct sockaddr sa_cli;
+    fd_set rfd;
+    int sk_cli;
+    int len;
+    vector<MySocket *> res;
+
+    FD_ZERO(&rfd);
+    FD_SET(skfd, &rfd);
+
+    
+    rsize = pselect(FD_SETSIZE,&rfd, NULL, NULL, &ts,NULL);
+    if(rsize==-1){
+    
+    }else if(rsize == 0){
+    }else{
+        for(int i=0; i<rsize; i++){
+            sk_cli = accept(skfd, &sa_cli, (socklen_t *)&len);
+            if(sk_cli==-1){
+                cout<<"accept fail"<<endl;
+                perr();
+            }else{
+                res.push_back(new MySocket(sk_cli, &sa_cli));
+            }
+
+        }
+    }
+    return res; 
 }
 
 MyServer::~MyServer(){

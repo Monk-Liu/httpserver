@@ -3,23 +3,28 @@ int main(int argc, char **argv){
 
     if(argc==3){
         MyServer s(atoi(argv[2]), argv[1]);
-        MySocket* sfd;
         string rbuff;
-        MyThreadPool mtp(10);
+        //MyThreadPool mtp(10);
         HttpHandler * hd;
+        MySocket* sfd;
+        vector<MySocket*> sfdlist;
         while(1){
-            sfd = s.myaccept();
-            if(sfd && sfd>=0){
-                int i=0;
+            sfdlist = s.selectaccept();
+            for(int i=0; i<sfdlist.size(); i++){
+                sfd = sfdlist[i];
                 sfd->myread(rbuff);
-                //cout<<rbuff<<endl;
-                hd = new HttpHandler(sfd, rbuff);
-                mtp.addtask(hd);
-                //hd->run();
+                HttpHandler hdnopool(sfd,rbuff);
+                hdnopool.run();
                 rbuff.clear();
-            }else{
-                printf("---------------------->Error with sfd[%d]\n",sfd);
             }
+            //sfd = s.myaccept();
+            /*if(sfd && sfd>=0){
+                sfd->myread(rbuff);
+                //hd = new HttpHandler(sfd, rbuff);
+                //mtp.addtask(hd);
+                hd->run();
+                rbuff.clear();
+            }*/
         }
     }
     return 0;
